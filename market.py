@@ -14,7 +14,7 @@ from sqlalchemy import(
 
 # Database details
 username    = "market"
-password    = "mosudstrongpassword"
+password    = "\strongpassword"
 dbhost      = "localhost"
 db_name     = "market"
 
