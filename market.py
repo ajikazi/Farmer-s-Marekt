@@ -1,7 +1,7 @@
 from flask import Flask,redirect,url_for,render_template,request
+from flask_mysqldb import MySQL
 import jinja2
 from flask_sqlalchemy import SQLAlchemy
-
 
 from sqlalchemy import(
     Boolean,
@@ -12,27 +12,20 @@ from sqlalchemy import(
 )
 
 
-# Database details
-username    = "market"
-password    = "\strongpassword"
-dbhost      = "localhost"
-db_name     = "market"
 
 app=Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://{username}:{password}@{dbhost}/{db_name}'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
-db=SQLAlchemy(app)
+app.config['MYSQL_HOST'] ="localhost"
+app.config['MYSQL_USER'] ="market"
+app.config['MYSQL_PASSWORD'] ="mosudstrongpassword"
+app.config['MYSQL_DB'] ="market"
 
-
-with app.app_context():
-    db.create_all()
-
+mysql = MySQL(app)
 
 
 class Item(db.Model):
     id      = Column(Integer(), primary_key=True )
-    name    = Column(String(20), nullable=False)
+    name    = Column(String(30), nullable=False)
     price   = Column(Integer(), nullable=False, unique=True)
     barcode     = Column(String(12), nullable=False, unique=True)
     description = Column(String(1024), nullable=False, unique=True)
@@ -51,9 +44,9 @@ def home_page():
 def market_page():
 
     items = [
-    {'id': 1, 'name': 'Phone', 'barcode': '893212299897', 'price': 500},
-    {'id': 2, 'name': 'Laptop', 'barcode': '123985473165', 'price': 900},
-    {'id': 3, 'name': 'Keyboard', 'barcode': '231985128446', 'price': 150}
+    {'id': 1, 'name': 'Honey Beans', 'barcode': '893212299897', 'price': 500},
+    {'id': 2, 'name': 'Jamila Rice', 'barcode': '123985473165', 'price': 900},
+    {'id': 3, 'name': 'Long-grained Rice', 'barcode': '231985128446', 'price': 150}
 ]
 
     return render_template('market.html', items=items)
