@@ -17,7 +17,7 @@ app=Flask(__name__)
 
 app.config['MYSQL_HOST'] ="localhost"
 app.config['MYSQL_USER'] ="market"
-app.config['MYSQL_PASSWORD'] ="mosudstrongpassword"
+app.config['MYSQL_PASSWORD'] ="##############"
 app.config['MYSQL_DB'] ="market"
 
 mysql = MySQL(app)
