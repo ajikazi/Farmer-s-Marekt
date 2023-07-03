@@ -18,12 +18,12 @@
     </thead>
     <tbody>
         <!-- Your rows inside the table HERE: -->
-        {% for item in items%}
+        {% for items in items%}
             <tr>
-                <td>{{ item.id}}</td>
-                <td>{{ item.name}}</td>
-                <td>{{ item.barcode}}</td>
-                <td>${{ item.price}}</td>
+                <td>{{ items.id}}</td>
+                <td>{{ items.name}}</td>
+                <td>{{ items.barcode}}</td>
+                <td>${{ items.price}}</td>
                 <td>
                     <button class="btn btn-outline btn-info">More Info</button>
                     <button class="btn btn-outline btn-success">Purchase this Item</button>

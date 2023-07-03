@@ -1,7 +1,10 @@
+import os, sys
+sys.path.insert(0, 'venv/bin/lib/python3.10/site-packages') 
 from flask import Flask,redirect,url_for,render_template,request
-from flask_mysqldb import MySQL
+#from flask_mysqldb import MySQL
 import jinja2
 from flask_sqlalchemy import SQLAlchemy
+import time
 
 from sqlalchemy import(
     Boolean,
@@ -15,21 +18,39 @@ from sqlalchemy import(
 
 app=Flask(__name__)
 
-app.config['MYSQL_HOST'] ="localhost"
-app.config['MYSQL_USER'] ="market"
-app.config['MYSQL_PASSWORD'] ="##############"
-app.config['MYSQL_DB'] ="market"
+dbuser = 'root'
+dbpass = 'MyN3wP4ssw0rd'
+dbhost = 'localhost'
+dbname = 'market'
 
-mysql = MySQL(app)
+print(dbuser,dbpass,dbhost,dbname); #time.sleep(100)
+app.config['SQLALCHEMY_DATABASE_URI'] ="mysql+pymysql://{dbuser}:{dbpass}@{dbhost}/{dbname}".format(
+						                                        dbuser=dbuser,
+						                                        dbpass=dbpass,
+						                                        dbhost=dbhost,
+						                                        dbname=dbname)
+
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://market:mosudstrongpassword@localhost/market'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+
+# app.config['MYSQL_HOST'] ="localhost"
+# app.config['MYSQL_USER'] ="market"
+# app.config['MYSQL_PASSWORD'] ="mosudstrongpassword"
+# app.config['MYSQL_DB'] ="market"
+
+#mysql = MySQL(app)
+db = SQLAlchemy(app)
 
 
-class Item(db.Model):
+class Items(db.Model):
     id      = Column(Integer(), primary_key=True )
     name    = Column(String(30), nullable=False)
     price   = Column(Integer(), nullable=False, unique=True)
     barcode     = Column(String(12), nullable=False, unique=True)
     description = Column(String(1024), nullable=False, unique=True)
 
+    def __repr__(self):
+        return f'Item {self.name}'
 
 
 @app.route('/',methods=['GET','POST'])
@@ -43,13 +64,10 @@ def home_page():
 @app.route('/market')
 def market_page():
 
-    items = [
-    {'id': 1, 'name': 'Honey Beans', 'barcode': '893212299897', 'price': 500},
-    {'id': 2, 'name': 'Jamila Rice', 'barcode': '123985473165', 'price': 900},
-    {'id': 3, 'name': 'Long-grained Rice', 'barcode': '231985128446', 'price': 150}
-]
-
+    items = Items.query.all()
     return render_template('market.html', items=items)
+
+
 
 if __name__ == '__main__':
     #DEBUG is SET to TRUE. CHANGE FOR PROD
